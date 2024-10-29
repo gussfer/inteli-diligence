@@ -4,7 +4,8 @@ export const transformDataCies = (ceisData: any[]): CeisData[] => {
   return ceisData.map((originalData) => ({
     id: originalData.id,
     api: "CEIS",
-    dataPublicacaoSancao: originalData.dataPublicacaoSancao,
+    dataInicioSancao: originalData.dataInicioSancao,
+    dataFimSancao: originalData.dataFimSancao,
     descricaoResumida: originalData.tipoSancao.descricaoResumida,
     nomeExibicao: originalData.fonteSancao.nomeExibicao,
     descricao: originalData.fundamentacao[0]?.descricao || "Sem descrição",

@@ -1,7 +1,8 @@
 export interface CeisData {
   id: string;
   api: string;
-  dataPublicacaoSancao: string;
+  dataInicioSancao: string;
+  dataFimSancao: string;
   descricaoResumida: string;
   nomeExibicao: string;
   descricao: string;
