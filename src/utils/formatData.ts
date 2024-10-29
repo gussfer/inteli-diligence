@@ -59,14 +59,6 @@ export const transformDataCeaf = (ceafData: any[]): any[] => {
   }));
 };
 
-export const transformDataPep = (pepData: any[]): any[] => {
-  return pepData.map((originalData) => ({
-    id: originalData.id,
-    api: "Pep",
-    ...originalData,
-  }));
-};
-
 export const formatDocument = (value: string): string => {
   const numbersOnly = value.replace(/\D/g, "");
 

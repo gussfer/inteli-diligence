@@ -5,7 +5,7 @@ import { Wrapper } from './wrapper';
 import Image from 'next/image';
 import searchIcon from '@/assets/search.png';
 import { CeisData, LenienciaData } from '@/@types/data';
-import { formatDocument, transformDataCeaf, transformDataCepim, transformDataCies, transformDataCnep, transformDataLeniencia, transformDataPep } from '@/utils/formatData';
+import { formatDocument, transformDataCeaf, transformDataCepim, transformDataCies, transformDataCnep, transformDataLeniencia } from '@/utils/formatData';
 
 export const SearchCompanies = () => {
   const [document, setDocument] = useState('');
@@ -29,7 +29,6 @@ export const SearchCompanies = () => {
       const cnepPromise = fetch(`/api/cnep?${document.length > 14 ? "cnpj" : "cpf"}=${document}`);
       const cepimPromise = fetch(`/api/cepim?cnpj=${document}`);
       const ceafPromise = fetch(`/api/ceaf?${document.length > 14 ? "cnpj" : "cpf"}=${document}`);
-      const pepPromise = fetch(`/api/peps?cpf=${document}`);
 
       const responses = await Promise.allSettled([
         ceisPromise,
@@ -37,17 +36,16 @@ export const SearchCompanies = () => {
         cnepPromise,
         cepimPromise,
         ceafPromise,
-        pepPromise,
       ]);
 
 
 
-      const [resultCeis, resultLeniencia, resultCnep, resultCepim, resultCeaf, resultPep] = await Promise.all(
+      const [resultCeis, resultLeniencia, resultCnep, resultCepim, resultCeaf] = await Promise.all(
         responses.map(async (response, index) => {
           if (response.status === "fulfilled" && response.value.ok) {
             return response.value.json();
           } else {
-            console.error(`Erro ao buscar dados da API ${["CEIS", "Leniencia", "CNEP", "CEPIM", "CEAF", "PEP"][index]}`);
+            console.error(`Erro ao buscar dados da API ${["CEIS", "Leniencia", "CNEP", "CEPIM", "CEAF"][index]}`);
             return [];
           }
         })
@@ -58,7 +56,6 @@ export const SearchCompanies = () => {
       const newDataCnep = transformDataCnep(resultCnep as []);
       const newDataCepim = transformDataCepim(resultCepim as []);
       const newDataCeaf = transformDataCeaf(resultCeaf as []);
-      const newDataPep = transformDataPep(resultPep as []);
 
       setData([
         ...newDataCeis,
@@ -66,7 +63,6 @@ export const SearchCompanies = () => {
         ...newDataCnep,
         ...newDataCepim,
         ...newDataCeaf,
-        ...newDataPep,
       ]);
     } catch (error) {
       setData([]);
