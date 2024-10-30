@@ -83,7 +83,7 @@ export const SearchCompanies = () => {
     <div className="w-full h-auto bg-white flex flex-col gap-4">
       <div className="h-72 md:min-h-[600px] p-8 md:p-10 w-full flex flex-col gap-14 items-center justify-center bg-gradient-to-l from-[#1E4C78] to-[#1E4C78] via-[#1E4C78]">
         <h2 className="font-bold text-2xl md:text-4xl text-white">
-        🧠 Bem vindo ao Inteli Diligence 🧠
+        🧠 Bem-vindo ao Inteli Diligence 🧠
         </h2>
         <p className="mt-[-30px] text-[25px] font-bold">
           Insira um CNPJ para iniciar sua pesquisa
