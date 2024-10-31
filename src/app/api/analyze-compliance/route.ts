@@ -78,7 +78,7 @@ export async function POST(request: Request) {
     };
 
     // Opcional: Salvar a análise em um banco de dados ou sistema de logs
-    await saveAnalysisToDatabase(analysis);
+    // await saveAnalysisToDatabase(analysis);
 
     return NextResponse.json(analysis);
 
@@ -95,11 +95,11 @@ export async function POST(request: Request) {
 }
 
 // Função auxiliar para salvar a análise (implementar conforme necessidade)
-async function saveAnalysisToDatabase(analysis: AnalysisResult) {
-  // Implementar a lógica de salvamento no banco de dados
-  // Exemplo: MongoDB, PostgreSQL, etc.
-  console.log("Análise salva:", analysis.requestId);
-}
+// async function saveAnalysisToDatabase(analysis: AnalysisResult) {
+//   // Implementar a lógica de salvamento no banco de dados
+//   // Exemplo: MongoDB, PostgreSQL, etc.
+//   console.log("Análise salva:", analysis.requestId);
+// }
 
 // Interfaces para tipagem
 interface AnalysisResult {

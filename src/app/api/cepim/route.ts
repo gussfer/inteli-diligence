@@ -20,8 +20,6 @@ export async function GET(request: Request) {
       { status: 500 }
     );
   }
-
-  try {
     console.log(`CNPJ: ${cnpj}`);
     console.log(`URL da requisição: ${url}`);
 
@@ -40,13 +38,31 @@ export async function GET(request: Request) {
       );
     }
 
-    const data = await response.json();
-    return NextResponse.json(data); // Retorna os dados como JSON
-  } catch (error) {
-    console.error("Erro:", error);
-    return NextResponse.json(
-      { error: "Erro ao processar a requisição" },
-      { status: 500 }
-    );
-  }
+    const portalData = await response.json();
+
+    // Fazer a chamada para o endpoint de análise
+    const analysisResponse = await fetch(new URL('/api/analyze-compliance', request.url), {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(portalData)
+    });
+
+    if (analysisResponse == null) {
+      console.log('CNPJ não encontrado na lista CEPIM');
+    }
+
+    const analysisResult = await analysisResponse.json();
+
+    // Retornar tanto os dados brutos quanto a análise
+    return NextResponse.json({
+      portalData: portalData,        // Dados originais do Portal da Transparência
+      analysis: analysisResult,       // Resultado da análise da IA
+      metadata: {
+        cnpj: cnpj,
+        timestamp: new Date().toISOString(),
+        requestId: crypto.randomUUID()
+      }
+    });
 }

@@ -5,7 +5,7 @@ import { Wrapper } from './wrapper';
 import Image from 'next/image';
 import searchIcon from '@/assets/search.png';
 import { CeisData, LenienciaData } from '@/@types/data';
-import { formatDocument, transformDataCeaf, transformDataCepim, transformDataCies, transformDataCnep, transformDataLeniencia } from '@/utils/formatData';
+import { formatDocument, transformDataCepim, transformDataCies, transformDataCnep, transformDataLeniencia } from '@/utils/formatData';
 
 export const SearchCompanies = () => {
   const [document, setDocument] = useState('');
@@ -30,14 +30,12 @@ export const SearchCompanies = () => {
       const lenienciaPromise = fetch(`/api/leniencia?cnpj=${document}`);
       const cnepPromise = fetch(`/api/cnep?${document.length > 14 ? "cnpj" : "cpf"}=${document}`);
       const cepimPromise = fetch(`/api/cepim?cnpj=${document}`);
-      const ceafPromise = fetch(`/api/ceaf?${document.length > 14 ? "cnpj" : "cpf"}=${document}`);
 
       const responses = await Promise.allSettled([
         ceisPromise,
         lenienciaPromise,
         cnepPromise,
         cepimPromise,
-        ceafPromise,
       ]);
 
       const [resultCeis, resultLeniencia, resultCnep, resultCepim, resultCeaf] = await Promise.all(
@@ -55,14 +53,13 @@ export const SearchCompanies = () => {
       const newDataLeniencia = transformDataLeniencia(resultLeniencia as []);
       const newDataCnep = transformDataCnep(resultCnep as []);
       const newDataCepim = transformDataCepim(resultCepim as []);
-      const newDataCeaf = transformDataCeaf(resultCeaf as []);
+  
 
       const allData = [
         ...newDataCeis,
         ...newDataLeniencia,
         ...newDataCnep,
         ...newDataCepim,
-        ...newDataCeaf,
       ];
 
       setData(allData);
@@ -112,7 +109,7 @@ export const SearchCompanies = () => {
         </div>
       ) : (
         <>
-          {noResults ? (
+          {/* {noResults ? (
             <div className="w-full text-center text-red-500 font-bold">
               CNPJ não encontrado nas listas do portal da transparência.
             </div>
@@ -120,7 +117,7 @@ export const SearchCompanies = () => {
             data.map(item => (
               <Wrapper apiSearched={item.api} json={item} key={item.id} />
             ))
-          )}
+          )} */}
         </>
       )}
     </div>
