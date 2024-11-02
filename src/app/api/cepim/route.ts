@@ -20,8 +20,8 @@ export async function GET(request: Request) {
       { status: 500 }
     );
   }
-    console.log(`CNPJ: ${cnpj}`);
-    console.log(`URL da requisição: ${url}`);
+    // console.log(`CNPJ: ${cnpj}`);
+    // console.log(`URL da requisição: ${url}`);
 
     const response = await fetch(url, {
       method: "GET",
