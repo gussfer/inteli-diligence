@@ -57,6 +57,7 @@ export async function GET(request: Request) {
 
     // Retornar tanto os dados brutos quanto a análise
     return NextResponse.json({
+      api: "LENIENCIA",
       portalData: portalData,        // Dados originais do Portal da Transparência
       analysis: analysisResult,       // Resultado da análise da IA
       metadata: {

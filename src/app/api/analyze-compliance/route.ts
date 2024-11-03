@@ -88,7 +88,7 @@ export async function POST(request: Request) {
     3. CEPIM (Cadastro de Entidades Privadas Sem Fins Lucrativos Impedidas)
     4. Acordos de Leniência (Acordos firmados com empresas envolvidas em atos lesivos)
 
-    Sua análise deve:
+    Sua análise  Due Diligence deve:
 
     1. Avaliar a presença ou ausência da empresa em cada lista e suas implicações:
        - CEIS: Foco em sanções administrativas e impedimentos

@@ -20,8 +20,8 @@ export async function GET(request: Request) {
       { status: 500 }
     );
   }
-    // console.log(`CNPJ: ${cnpj}`);
-    // console.log(`URL da requisição: ${url}`);
+    console.log(`CNPJ: ${cnpj}`);
+    console.log(`URL da requisição: ${url}`);
 
     const response = await fetch(url, {
       method: "GET",
@@ -57,6 +57,7 @@ export async function GET(request: Request) {
 
     // Retornar tanto os dados brutos quanto a análise
     return NextResponse.json({
+      api: "CEPIM",
       portalData: portalData,        // Dados originais do Portal da Transparência
       analysis: analysisResult,       // Resultado da análise da IA
       metadata: {
