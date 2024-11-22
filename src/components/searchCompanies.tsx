@@ -10,10 +10,11 @@ import { formatDocument } from '@/utils/formatData';
 export const SearchCompanies = () => {
   const [document, setDocument] = useState('');
   const [isloading, setIsloading] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false); // Novo estado para o botão "GERAR PARECER"
   const [data, setData] = useState<(CeisData | LenienciaData)[]>([]);
   const [errorInput, setErrorInput] = useState(false);
   const [noResults, setNoResults] = useState(false);
-  const [resultIA, setResultIA] = useState("")
+  const [resultIA, setResultIA] = useState("");
 
   const handleDocument = (e: React.ChangeEvent<HTMLInputElement>) => {
     const formattedDocument = formatDocument(e.target.value);
@@ -22,20 +23,21 @@ export const SearchCompanies = () => {
   };
 
   const transformArray = () => {
-    const resultCeis = data.filter((item) => item.api === "CEIS")[0]
-    const resultCnep = data.filter((item) => item.api === "CNEP")[0]
-    const resultCepim = data.filter((item) => item.api === "CEPIM")[0]
-    const resultLeniencia = data.filter((item) => item.api === "LENIENCIA")[0]
+    const resultCeis = data.filter((item) => item.api === "CEIS")[0];
+    const resultCnep = data.filter((item) => item.api === "CNEP")[0];
+    const resultCepim = data.filter((item) => item.api === "CEPIM")[0];
+    const resultLeniencia = data.filter((item) => item.api === "LENIENCIA")[0];
 
     return {
       resultCeis,
       resultCnep,
       resultCepim,
       resultLeniencia
-    }
-  }
+    };
+  };
 
   const fetchApiIA = async () => {
+    setIsGenerating(true); // Inicia o estado de carregamento para a geração do parecer
     const { resultCeis, resultCnep, resultCepim, resultLeniencia } = transformArray();
 
     try {
@@ -50,18 +52,20 @@ export const SearchCompanies = () => {
           cepimData: resultCepim,
           acordosData: resultLeniencia
         })
-      })
+      });
 
       const analysisData = await analysisResponse.json();
-      setResultIA(analysisData.aiAnalysis)
+      setResultIA(analysisData.aiAnalysis);
     } catch (error) {
       console.log("Erro ao processar dados", error);
-      setResultIA("Erro ao processar dados")
+      setResultIA("Erro ao processar dados");
+    } finally {
+      setIsGenerating(false); // Finaliza o estado de carregamento para a geração do parecer
     }
-  }
+  };
 
   const fetchApisConcurrently = async (e: React.FormEvent) => {
-    setData([])
+    setData([]);
     e.preventDefault();
     setIsloading(true);
     setNoResults(false);
@@ -83,7 +87,7 @@ export const SearchCompanies = () => {
         responses.map(async (response, index) => {
           if (response.status === "fulfilled" && response.value.ok) {
             const data = await response.value.json();
-            return [data]
+            return [data];
           } else {
             console.error(`Erro ao buscar dados da API ${["CEIS", "Leniencia", "CNEP", "CEPIM"][index]}`);
             return [];
@@ -100,10 +104,10 @@ export const SearchCompanies = () => {
 
       const formatData = allData.map((item) => {
         if (item.portalData.length === 0) {
-          return { analysis: item.analysis.error, metadata: item.metadata, api: item.api }
+          return { analysis: item.analysis.error, metadata: item.metadata, api: item.api };
         }
-        return item
-      })
+        return item;
+      });
 
       setData(formatData);
 
@@ -127,10 +131,8 @@ export const SearchCompanies = () => {
   };
 
   const parseMarkdown = (text: string) => {
-    // Parse titles (##)
     const lines = text.split('\n');
     return lines.map((line, index) => {
-      // Check for titles
       if (line.startsWith('###')) {
         return (
           <h2 key={`title-${index}`} className="text-xl font-bold text-blue-950 mt-6 mb-4">
@@ -138,8 +140,6 @@ export const SearchCompanies = () => {
           </h2>
         );
       }
-      
-      // Regular text with bold parsing
       return (
         <p key={`text-${index}`} className="text-gray-800 text-base leading-relaxed mb-3">
           {parseBoldText(line)}
@@ -149,8 +149,7 @@ export const SearchCompanies = () => {
   };
 
   const formatAIResponse = (text: string) => {
-    const sections = text.split(/\n\s*\n/); // Split by double line breaks
-    
+    const sections = text.split(/\n\s*\n/);
     return sections.map((section, index) => (
       <div key={index} className="mb-6">
         {parseMarkdown(section)}
@@ -185,21 +184,24 @@ export const SearchCompanies = () => {
         </form>
         {data.length > 0 &&
           <button
-            className="w-full md:w-[700px] bg-blue-950 text-white h-11 p-4 flex items-center justify-center rounded-lg font-bold hover:bg-opacity-85 transition-all"
-            onClick={() => { fetchApiIA() }}
+            className={`w-full md:w-[700px] bg-blue-950 text-white h-11 p-4 flex items-center justify-center rounded-lg font-bold hover:bg-opacity-85 transition-all ${
+              isGenerating ? "opacity-50 cursor-not-allowed" : ""
+            }`}
+            onClick={fetchApiIA}
+            disabled={isGenerating}
           >
             GERAR PARECER
           </button>}
       </div>
-      {data.length > 0 && resultIA &&
+      {resultIA && (
         <div className="w-full max-w-[900px] p-8 text-black bg-gray-50 rounded-lg shadow-sm">
-          <h3 className="text-2xl font-semibold mb-6 text-blue-950 border-b pb-4">Análise de Compliance</h3>
-          <div className="w-full">
-            {formatAIResponse(resultIA)}
-          </div>
+          <h3 className="text-2xl font-semibold mb-6 text-blue-950 border-b pb-4">
+            PARECER AUDITORIA INTERNA
+          </h3>
+          <div className="w-full">{formatAIResponse(resultIA)}</div>
         </div>
-      }
-      {isloading ? (
+      )}
+      {isloading || isGenerating ? (
         <div className="h-28 w-full flex items-center justify-center">
           <div className="w-12 h-12 border-8 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
         </div>

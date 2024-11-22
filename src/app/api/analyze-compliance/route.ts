@@ -95,6 +95,7 @@ export async function POST(request: Request) {
        - CNEP: Foco em Lei Anticorrupção e acordos de leniência
        - CEPIM: Foco em impedimentos relacionados a transferências de recursos federais
        - Acordos de Leniência: Foco em acordos firmados, seus termos e status atual
+    1.1 Caso não seja encontrada a presença da empresa pesquisada, retorne dizendo que em relação aquela lista em específico, a empresa não está presente.
 
     2. Para cada lista, considerar:
        - Natureza e gravidade das sanções/impedimentos
@@ -106,21 +107,26 @@ export async function POST(request: Request) {
          * Status de cumprimento
          * Impacto nas operações atuais
 
-    3. Fornecer uma análise consolidada que:
-       - Avalie o risco global para a Algar
-       - Considere o impacto combinado das restrições
-       - Identifique padrões de não conformidade
-       - Avalie a extensão temporal das sanções
-       - Analise a efetividade de eventuais acordos de leniência
+    3. Retornar um parecer com a seguinte estrutura:
+    
+    SUMÁRIO EXECUTIVO
+    Visão geral da empresa: Razão social completa, CNPJ e sua situação atual (quando não for encontrada a razão social, retorne apenas que não foi possível localizar a razaão social);
+    Principais retornos: (listas em que a empresa está presente);
+    Nível de risco geral (Baixo, Médio, Alto, explicando brevemente o porque daquela classificação)
+    Data do parecer: Data do dia em que está sendo gerada a consulta (DD/MM/AAAA)
 
-    4. Concluir com uma recomendação clara sobre:
-       - Viabilidade de relações comerciais
-       - Ressalvas ou condições específicas
+    ANÁLISE DETALHADA
+    Detalhamento por base consultada:
+    Evidências encontradas:
+    Fontes consultadas:
 
+    RECOMENDAÇÃO E CONCLUSÃO
+    Viabilidade de relações comerciais com a Algar (Aprovada/Reprovada/Aprovada com Ressalvas)
+    Ressalvas ou condições específicas
     Forneça uma conclusão objetiva e bem fundamentada, considerando o impacto combinado de todas as 
     restrições encontradas nas listas e acordos de leniência.`;
 
-    const userPrompt = `Por favor, analise os seguintes dados das listas CEIS, CNEP, CEPIM e Acordos de Leniência:
+    const userPrompt = `Por favor, analise os seguintes dados das listas CEIS, CNEP, CEPIM e Acordos de Leniência e gere o Parecer da Auditoria Interna:
 
     Dados CEIS:
     ${JSON.stringify(ceisData, null, 2)}
