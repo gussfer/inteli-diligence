@@ -113,12 +113,11 @@ export async function POST(request: Request) {
     Visão geral da empresa: Razão social completa, CNPJ e sua situação atual (quando não for encontrada a razão social, retorne apenas que não foi possível localizar a razaão social);
     Principais retornos: (listas em que a empresa está presente);
     Nível de risco geral (Baixo, Médio, Alto, explicando brevemente o porque daquela classificação)
-    Data do parecer: Data do dia em que está sendo gerada a consulta (DD/MM/AAAA)
+    Data do parecer da auditoria interna: Data do dia em que está sendo gerada a consulta (DD/MM/AAAA)
 
     ANÁLISE DETALHADA
-    Detalhamento por base consultada:
-    Evidências encontradas:
-    Fontes consultadas:
+    Detalhamento por base consultada: (Evidências encontradas e Fontes consultadas)
+    
 
     RECOMENDAÇÃO E CONCLUSÃO
     Viabilidade de relações comerciais com a Algar (Aprovada/Reprovada/Aprovada com Ressalvas)
@@ -141,7 +140,7 @@ export async function POST(request: Request) {
     ${JSON.stringify(acordosData, null, 2)}`;
 
     const completion = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
+      model: "gpt-4o-mini",
       messages: [
         { role: "system", content: systemPrompt },
         { role: "user", content: userPrompt }
