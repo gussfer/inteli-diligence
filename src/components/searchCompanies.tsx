@@ -4,6 +4,8 @@ import { useState } from 'react';
 import { Wrapper } from './wrapper';
 import Image from 'next/image';
 import searchIcon from '@/assets/search.png';
+import algarLogo2 from '@/assets/logo_algar_2.png';
+import algarLogo from '@/assets/logo_algar.png';
 import { CeisData, LenienciaData } from '@/@types/data';
 import { formatDocument } from '@/utils/formatData';
 
@@ -160,6 +162,9 @@ export const SearchCompanies = () => {
   return (
     <div className="w-full h-auto bg-white flex flex-col justify-center items-center gap-4">
       <div className="h-72 md:min-h-[600px] p-8 md:p-10 w-full flex flex-col gap-14 items-center justify-center bg-gradient-to-l from-[#1E4C78] to-[#1E4C78] via-[#1E4C78]">
+      {/* <Image src={algarLogo} alt="search" width={160} height={20} style={{ position: 'absolute', top: 10, left: '50%',transform: 'translateX(-50%)', padding: '10px' }} /> */}
+      <Image src={algarLogo} alt="search" width={160} height={20} style={{ position: 'absolute', top: 10, left: 10, padding: '10px' }} />
+      {/* <Image src={algarLogo2} alt="search" width={60} height={20} style={{ position: 'absolute', top: 10, right: 10, padding: '10px' }} /> */}
         <h2 className="font-bold text-2xl md:text-4xl text-white">
           🧠 Bem-vindo ao Inteli Diligence 🧠
         </h2>
@@ -195,9 +200,8 @@ export const SearchCompanies = () => {
       </div>
       {resultIA && (
         <div className="w-full max-w-[900px] p-8 text-black bg-gray-50 rounded-lg shadow-sm">
-          <h3 className="text-2xl font-semibold mb-6 text-blue-950 border-b pb-4">
-            PARECER AUDITORIA INTERNA
-          </h3>
+          {/* <h3 className="text-2xl font-semibold mb-6 text-blue-950 border-b pb-4">
+          </h3> */}
           <div className="w-full">{formatAIResponse(resultIA)}</div>
         </div>
       )}
